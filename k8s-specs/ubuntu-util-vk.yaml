@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ubuntu-util-vk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ubuntu-util-vk
+  template:
+    metadata:
+      labels:
+        app: ubuntu-util-vk
+    spec:
+      containers:
+        - name: ubuntu-util-vk
+          image: zommarin/ubuntu-util
+          command:
+            - sleep
+          args:
+            - "36000"
+          ports:
+            - containerPort: 80
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+        kubernetes.io/role: agent
+        type: virtual-kubelet
+      tolerations:
+        - key: virtual-kubelet.io/provider
+          operator: Equal
+          value: azure
+          effect: NoSchedule
